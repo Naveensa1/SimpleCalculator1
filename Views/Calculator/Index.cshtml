@@ -1,22 +1,116 @@
 ﻿@{
-    ViewData["Title"] = "Calculator";
+    ViewData["Title"] = "Advanced Calculator";
 }
 
-<h2>Simple Calculator</h2>
+<style>
+    .calculator-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        max-width: 300px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid black;
+        border-radius: 10px;
+        background-color: silver;
+    }
 
-<form method="post">
-    <input type="number" step="any" name="number1" placeholder="Number 1" required />
-    <input type="number" step="any" name="number2" placeholder="Number 2" required />
-    <select name="operation">
-        <option>Add</option>
-        <option>Subtract</option>
-        <option>Multiply</option>
-        <option>Divide</option>
-    </select>
-    <button type="submit">Calculate</button>
-</form>
+    .display {
+        grid-column: span 4;
+        height: 50px;
+        text-align: right;
+        font-size: 1.5rem;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
 
-@if (ViewBag.Result != null)
-{
-    <h3>Resault: @ViewBag.Result</h3>
-}
+    button {
+        height: 50px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.1s ease;
+        outline: none;
+    }
+
+        /* Hover effect to make it glow slightly */
+        button:hover {
+            background-color: silver;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* The "Pressed" effect */
+        button:active {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: translateY(2px);
+        }
+
+    .operator {
+        background-color: #ff9500;
+        color: white;
+        border: none;
+        box-shadow: 0 4px 0 #cc7a00;
+    }
+
+        .operator:active {
+            box-shadow: 0 0 0;
+            transform: translateY(4px);
+            color: black;
+        }
+</style>
+
+<div class="text-center">
+    <h2>Calculator</h2>
+
+    <form asp-action="Calculate" method="post">
+        <div class="calculator-grid">
+            <input type="text" id="display" name="display" class="display"
+                   value="@ViewBag.Display" readonly />
+
+            <button type="button" class="clear" onclick="clearDisplay()">C</button>
+            <button type="button" onclick="appendToDisplay('/')" class="operator">÷</button>
+            <button type="button" onclick="appendToDisplay('*')" class="operator">×</button>
+            <button type="button" onclick="deleteLast()">←</button>
+
+            <button type="button" onclick="appendToDisplay('7')">7</button>
+            <button type="button" onclick="appendToDisplay('8')">8</button>
+            <button type="button" onclick="appendToDisplay('9')">9</button>
+            <button type="button" onclick="appendToDisplay('-')" class="operator">-</button>
+
+            <button type="button" onclick="appendToDisplay('4')">4</button>
+            <button type="button" onclick="appendToDisplay('5')">5</button>
+            <button type="button" onclick="appendToDisplay('6')">6</button>
+            <button type="button" onclick="appendToDisplay('+')" class="operator">+</button>
+
+            <button type="button" onclick="appendToDisplay('1')">1</button>
+            <button type="button" onclick="appendToDisplay('2')">2</button>
+            <button type="button" onclick="appendToDisplay('3')">3</button>
+            <button type="submit" class="equals">=</button>
+
+            <button type="button" onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
+            <button type="button" onclick="appendToDisplay('.')">.</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function appendToDisplay(value) {
+        const display = document.getElementById('display');
+        // Prevent starting with an operator
+        if (display.value === "" && isNaN(value) && value !== '-') return;
+        display.value += value;
+    }
+
+    function clearDisplay() {
+        document.getElementById('display').value = "";
+    }
+
+    function deleteLast() {
+        const display = document.getElementById('display');
+        display.value = display.value.slice(0, -1);
+    }
+</script>
