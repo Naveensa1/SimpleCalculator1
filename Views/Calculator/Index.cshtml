@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Calculator";
+}
+
+<h2>Simple Calculator</h2>
+
+<form method="post">
+    <input type="number" step="any" name="number1" placeholder="Number 1" required />
+    <input type="number" step="any" name="number2" placeholder="Number 2" required />
+    <select name="operation">
+        <option>Add</option>
+        <option>Subtract</option>
+        <option>Multiply</option>
+        <option>Divide</option>
+    </select>
+    <button type="submit">Calculate</button>
+</form>
+
+@if (ViewBag.Result != null)
+{
+    <h3>Resault: @ViewBag.Result</h3>
+}
