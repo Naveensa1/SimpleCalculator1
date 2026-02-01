@@ -1,35 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Data; // Required for computing strings
 
 namespace CalculatorApp.Controllers
 {
     public class CalculatorController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
         [HttpPost]
-        public IActionResult Index(double number1, double number2, string operation)
+        public IActionResult Calculate(string display)
         {
-            double result = 0;
-            switch (operation)
+            try
             {
-                case "Add":
-                    result = number1 + number2;
-                    break;
-                case "Subtract":
-                    result = number1 - number2;
-                    break;
-                case "Multiply":
-                    result = number1 * number2;
-                    break;
-                case "Divide":
-                    result = number2 != 0 ? number1 / number2 : 0;
-                    break;
+                var result = new DataTable().Compute(display, null);
+                ViewBag.Display = result.ToString();
             }
-            ViewBag.Result = result;
-            return View();
+            catch
+            {
+                ViewBag.Display = "Error";
+            }
+            return View("Index");
         }
     }
 }
